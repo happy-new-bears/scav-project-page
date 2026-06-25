@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SCAV: Self-supervised Dual-source Audio-Visual Localisation via Selective Convergence. ECCV 2026.">
+  <meta name="keywords" content="audio-visual localisation, sound source localisation, dual-source, self-supervised, selective convergence, ECCV 2026">
+
+  <!-- Open Graph (URL intentionally omitted until deployment) -->
+  <meta property="og:title" content="Whence the Voice? Self-supervised Dual-source Audio-Visual Localisation via Selective Convergence"/>
+  <meta property="og:description" content="Contrastive audio-visual models naturally converge to a single dominant source. SCAV exploits this to localise two sources without any annotation."/>
+  <meta property="og:image" content="static/images/img1.png"/>
+  <meta name="twitter:card" content="summary_large_image">
+
+  <title>Whence the Voice? — SCAV (ECCV 2026)</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+
+  <style>
+    :root{
+      --ink:#1b2030;
+      --muted:#6b7280;
+      --accent:#e8590c;      /* Ours highlight (orange) */
+      --accent-soft:#fde3d2;
+      --bar-grey:#aeb6c2;     /* baseline bars */
+      --bar-grey-d:#8a93a3;
+      --line:#e6e8ee;
+      --hero-a:#101630;
+      --hero-b:#27315c;
+    }
+    html{scroll-behavior:smooth;}
+    body{color:var(--ink);}
+    /* ---------- nav ---------- */
+    .scav-nav{
+      position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);
+      backdrop-filter:saturate(150%) blur(6px);border-bottom:1px solid var(--line);
+    }
+    .scav-nav .container{display:flex;align-items:center;justify-content:center;gap:1.25rem;
+      height:52px;flex-wrap:wrap;}
+    .scav-nav a{color:var(--muted);font-weight:600;font-size:.92rem;text-decoration:none;}
+    .scav-nav a:hover{color:var(--accent);}
+    .scav-nav .brand{color:var(--ink);font-weight:800;margin-right:auto;}
+    @media(max-width:768px){.scav-nav .brand{display:none;} .scav-nav .container{gap:.8rem;}}
+    /* ---------- hero ---------- */
+    .scav-hero{
+      background:linear-gradient(135deg,var(--hero-a),var(--hero-b));
+      color:#fff;padding:3.2rem 1rem 2.6rem;
+    }
+    .scav-hero .publication-title{color:#fff;}
+    .scav-hero .venue-badge{
+      display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+      color:#fff;border-radius:999px;padding:.25rem .9rem;font-weight:700;letter-spacing:.04em;
+      font-size:.85rem;margin-bottom:1rem;
+    }
+    .scav-hero .title-line{font-style:italic;opacity:.95;}
+    .scav-hero .authors{margin:.4rem 0;font-size:1.06rem;}
+    .scav-hero .authors a{color:#fff;text-decoration:underline;text-underline-offset:2px;}
+    .scav-hero .authors sup{color:#ffd9bf;}
+    .scav-hero .affil{opacity:.85;font-size:.98rem;margin-top:.3rem;}
+    .scav-hero .eq{opacity:.7;font-size:.85rem;}
+    .btns{margin-top:1.3rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;}
+    .btns a{
+      display:inline-flex;align-items:center;gap:.45rem;background:#0d1226;color:#fff;
+      border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:.5rem 1.1rem;
+      font-weight:600;text-decoration:none;transition:.15s;
+    }
+    .btns a:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px);}
+    .btns a.disabled{opacity:.5;cursor:not-allowed;}
+    .fps{
+      margin-top:1.3rem;display:inline-flex;align-items:center;gap:.6rem;
+      background:rgba(232,89,12,.16);border:1px solid rgba(255,180,140,.5);
+      border-radius:12px;padding:.55rem 1.1rem;font-size:.95rem;
+    }
+    .fps b{color:#ffd9bf;font-size:1.15rem;}
+    /* ---------- sections ---------- */
+    .sec{padding:3.2rem 1rem;}
+    .sec.alt{background:#f7f8fb;}
+    .sec h2.t{font-size:1.9rem;font-weight:800;text-align:center;margin-bottom:.4rem;}
+    .sec .lead{text-align:center;color:var(--muted);max-width:760px;margin:0 auto 2rem;font-size:1.05rem;}
+    figure.fig{margin:0 auto;max-width:1000px;}
+    figure.fig img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;}
+    figure.fig figcaption{color:var(--muted);font-size:.92rem;margin-top:.7rem;text-align:center;}
+    .takeaway{
+      max-width:820px;margin:1.6rem auto 0;background:var(--accent-soft);
+      border-left:4px solid var(--accent);border-radius:8px;padding:.9rem 1.1rem;color:#7a3408;
+    }
+    /* ---------- two-stage cards ---------- */
+    .stage-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:920px;margin:1.6rem auto 0;}
+    @media(max-width:768px){.stage-cards{grid-template-columns:1fr;}}
+    .stage-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.2rem;}
+    .stage-card .tag{display:inline-block;font-weight:800;color:var(--accent);font-size:.8rem;letter-spacing:.06em;}
+    .stage-card h3{font-weight:700;margin:.2rem 0 .4rem;font-size:1.12rem;}
+    .stage-card p{color:#444;font-size:.96rem;}
+    /* ---------- charts ---------- */
+    .chart-wrap{max-width:860px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.2rem 1rem .6rem;}
+    .chart-wrap h3{text-align:center;font-weight:700;margin-bottom:.2rem;}
+    .chart-sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:.6rem;}
+    .legend{display:flex;gap:1.2rem;justify-content:center;margin:.4rem 0 0;font-size:.88rem;color:#444;}
+    .legend span{display:inline-flex;align-items:center;gap:.4rem;}
+    .legend i{width:13px;height:13px;border-radius:3px;display:inline-block;}
+    .bar-val{font-size:11px;fill:#333;font-weight:600;}
+    .bar-grp-label{font-size:13px;fill:#1b2030;font-weight:700;}
+    .axis-line{stroke:#cfd4de;stroke-width:1;}
+    /* ---------- collapsible ---------- */
+    details.fold{max-width:1000px;margin:1.4rem auto 0;border:1px solid var(--line);border-radius:12px;background:#fff;}
+    details.fold>summary{cursor:pointer;padding:.9rem 1.2rem;font-weight:700;color:var(--ink);list-style:none;}
+    details.fold>summary::-webkit-details-marker{display:none;}
+    details.fold>summary::before{content:"▸ ";color:var(--accent);}
+    details.fold[open]>summary::before{content:"▾ ";}
+    details.fold .fold-body{padding:0 1.2rem 1.2rem;}
+    /* ---------- bibtex ---------- */
+    .bib-box{position:relative;max-width:900px;margin:0 auto;}
+    .bib-box pre{background:#0d1226;color:#e7ebf5;border-radius:12px;padding:1.2rem 1.2rem;overflow:auto;font-size:.86rem;}
+    .copy-btn{position:absolute;top:.7rem;right:.7rem;background:#27315c;color:#fff;border:none;
+      border-radius:8px;padding:.4rem .8rem;cursor:pointer;font-weight:600;font-size:.82rem;}
+    .copy-btn:hover{background:var(--accent);}
+    footer.scav-foot{padding:2rem 1rem;text-align:center;color:var(--muted);font-size:.85rem;background:#f7f8fb;border-top:1px solid var(--line);}
+    /* carousel items */
+    .carousel .item{padding:0 .5rem;}
+    .carousel .item img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;}
+    .carousel .item .cap{color:var(--muted);font-size:.9rem;text-align:center;margin-top:.6rem;}
+  </style>
+</head>
+<body>
+
+  <!-- ================= NAV ================= -->
+  <nav class="scav-nav">
+    <div class="container">
+      <span class="brand">SCAV</span>
+      <a href="#insight">Insight</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#dataset">Dataset</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <section class="scav-hero has-text-centered">
+    <div class="container is-max-desktop">
+      <span class="venue-badge">ECCV 2026</span>
+      <h1 class="title is-2 publication-title">
+        <span class="title-line">Whence the Voice?</span><br>
+        Self-supervised Dual-source Audio-Visual Localisation via Selective Convergence
+      </h1>
+
+      <div class="authors">
+        <a href="#">Han Hu</a><sup>*</sup>,
+        <a href="#">Dongheng Lin</a><sup>*</sup>,
+        <a href="#">Yuqi Hou</a>,
+        <a href="#">Haotian Li</a>,
+        <a href="#">Hyung Jin Chang</a>,
+        <a href="#">Jianbo Jiao</a>
+      </div>
+      <div class="affil">The MIx Group, School of Computer Science, University of Birmingham, UK</div>
+      <div class="eq"><sup>*</sup>Equal contribution</div>
+
+      <div class="btns">
+        <!-- TODO: Paper/arXiv link pending — replace href="#" when available -->
+        <a href="#" class="disabled" title="Coming soon"><i class="fas fa-file-pdf"></i> Paper</a>
+        <a href="https://github.com/happy-new-bears/SCAV" target="_blank" rel="noopener"><i class="fab fa-github"></i> Code</a>
+        <a href="https://drive.google.com/drive/folders/1AyAUnO5YeJMECnRutgXqr249KqzpZB4o?usp=sharing" target="_blank" rel="noopener"><i class="fas fa-cubes"></i> Checkpoints</a>
+        <a href="https://drive.google.com/file/d/1tYu-MAhG1El1kc8DE9UebSHeF8u9Ss-1/view?usp=sharing" target="_blank" rel="noopener"><i class="fas fa-database"></i> Dataset</a>
+        <a href="#bibtex"><i class="fas fa-quote-right"></i> BibTeX</a>
+      </div>
+
+      <div><span class="fps"><i class="fas fa-bolt"></i> Both sources in a single forward pass — <b>43.2&nbsp;FPS</b> on one NVIDIA A100</span></div>
+    </div>
+  </section>
+
+  <!-- ================= TEASER / OVERVIEW ================= -->
+  <section class="sec">
+    <div class="container is-max-desktop">
+      <figure class="fig">
+        <img src="static/images/img1.png" alt="Overview of SCAV: the circular dependency, our two-stage framework, and performance.">
+        <figcaption><b>The paradox &amp; our idea.</b> Localising mixed sources needs separated audio, while separating audio needs locations — a circular dependency. SCAV breaks it by exploiting <i>selective convergence</i>: the model first locks onto one source, then reveals the other.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================= INSIGHT ================= -->
+  <section class="sec alt" id="insight">
+    <div class="container is-max-desktop">
+      <h2 class="t">The Key Insight: Selective Convergence</h2>
+      <p class="lead">When a contrastive audio-visual model is trained on mixed audio with two sounding objects, it does not split its attention evenly. It spontaneously commits to <b>one</b> source — the one it becomes biased toward.</p>
+
+      <figure class="fig">
+        <img src="static/images/img5.png" alt="Examples of selective convergence: input frames and first-stage heatmaps concentrating on a single source.">
+        <figcaption><b>Selective convergence in Stage&nbsp;1.</b> Given two ground-truth sources (green / red boxes), the first-stage heatmap concentrates on a single dominant source rather than both.</figcaption>
+      </figure>
+
+      <div class="takeaway">
+        <b>What we claim — and what we don't.</b> We define the <i>dominant source</i> as whichever source the model converges to. Our framework depends only on the fact that it commits to <i>one</i> source as a spatial prior — <b>not</b> on <i>which</i> one. The identity of the winner is left to the data.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= METHOD ================= -->
+  <section class="sec" id="method">
+    <div class="container is-max-desktop">
+      <h2 class="t">Method: A Two-Stage Progressive Framework</h2>
+      <p class="lead">SCAV turns the one-source bias into a feature, not a bug: it uses the dominant source as a spatial prior to progressively uncover the subdominant one.</p>
+
+      <figure class="fig">
+        <img src="static/images/img2.png" alt="SCAV architecture: Stage 1 dominant-source localisation, Stage 2 progressive refinement.">
+        <figcaption><b>SCAV architecture.</b> Stage&nbsp;1 (left) localises the dominant source via contrastive learning; Stage&nbsp;2 (right) decouples visual and audio features to reveal the subdominant source.</figcaption>
+      </figure>
+
+      <div class="stage-cards">
+        <div class="stage-card">
+          <span class="tag">STAGE 1</span>
+          <h3>Find the dominant source</h3>
+          <p>Contrastive learning on the mixed audio drives the model to converge on a single source, yielding a clean spatial prior <b>M<sub>dom</sub></b> — no annotations required.</p>
+        </div>
+        <div class="stage-card">
+          <span class="tag">STAGE 2</span>
+          <h3>Reveal the subdominant source</h3>
+          <p>Using <b>M<sub>dom</sub></b> as a prior, the model decouples the remaining audio-visual correspondence and localises the second source <b>M<sub>sub</sub></b> in the same forward pass.</p>
+        </div>
+      </div>
+
+      <details class="fold">
+        <summary>Dominant-source extraction (post-processing)</summary>
+        <div class="fold-body">
+          <figure class="fig">
+            <img src="static/images/supp_fig3.png" alt="Illustration of the post-processing algorithm for dominant source extraction.">
+            <figcaption>Post-processing pipeline that extracts the dominant source region from the Stage&nbsp;1 heatmap.</figcaption>
+          </figure>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= RESULTS ================= -->
+  <section class="sec alt" id="results">
+    <div class="container is-max-desktop">
+      <h2 class="t">Results</h2>
+      <p class="lead">SCAV achieves the best performance among self-supervised methods across benchmarks — and even surpasses some weakly-supervised methods on certain metrics. All charts below compare <b>self-supervised methods only</b>.</p>
+
+      <!-- Primary chart: VGGSound-Duet^Mask -->
+      <div class="chart-wrap">
+        <h3>VGGSound-Duet<sup>Mask</sup> — mask-based evaluation</h3>
+        <div class="chart-sub">Higher is better. Self-supervised methods only.</div>
+        <svg id="chartMask" viewBox="0 0 820 420" role="img" aria-label="Bar chart on VGGSound-Duet Mask"></svg>
+        <div class="legend" id="legendMask"></div>
+      </div>
+
+      <!-- Secondary chart: bbox CIoU@0.3 -->
+      <div class="chart-wrap" style="margin-top:1.6rem;">
+        <h3>Bounding-box evaluation — CIoU@0.3</h3>
+        <div class="chart-sub">Self-supervised methods on MUSIC-Duet and VGGSound-Duet.</div>
+        <svg id="chartBbox" viewBox="0 0 820 420" role="img" aria-label="Bar chart, bounding box CIoU"></svg>
+        <div class="legend" id="legendBbox"></div>
+      </div>
+
+      <!-- Qualitative carousel -->
+      <div style="max-width:1000px;margin:2.2rem auto 0;">
+        <h3 class="title is-4 has-text-centered">Qualitative Comparisons</h3>
+        <div class="carousel" id="qual-carousel">
+          <div class="item">
+            <img src="static/images/img3.png" alt="Qualitative comparison with LVS and EZ-VSL.">
+            <div class="cap">Input + masks, then LVS and EZ-VSL, then our two localised sources. Warmer = higher activation.</div>
+          </div>
+          <div class="item">
+            <img src="static/images/supp_f1-cropped.png" alt="Comparison with Mix-and-Localize.">
+            <div class="cap">Comparison with Mix-and-Localize: ground-truth masks, then first- and second-source localisation from each method.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Failure cases -->
+      <details class="fold">
+        <summary>Failure cases</summary>
+        <div class="fold-body">
+          <figure class="fig">
+            <img src="static/images/supp_f3.png" alt="Representative failure cases.">
+            <figcaption>Representative failures: boundary inaccuracy (top), separation failure (middle), and false activation on correlated but non-sounding regions (bottom).</figcaption>
+          </figure>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= DATASET ================= -->
+  <section class="sec" id="dataset">
+    <div class="container is-max-desktop">
+      <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
+      <p class="lead">Existing benchmarks compare continuous heatmaps against bounding boxes, which include large background regions and systematically bias the metrics. We add pixel-level segmentation masks for spatially-aligned evaluation.</p>
+
+      <figure class="fig">
+        <img src="static/images/bbox_issue.png" alt="Bounding boxes include background; our heatmaps match sounding regions.">
+        <figcaption><b>Why bounding boxes mislead.</b> Top: ground-truth boxes encompass substantial background. Bottom: our heatmaps precisely match the sounding regions.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:1.6rem;max-width:720px;">
+        <img src="static/images/vggsound_duet_mask_hist.png" alt="Category distribution of VGGSound-Duet Mask.">
+        <figcaption>VGGSound-Duet<sup>Mask</sup>: SAM-generated segmentation masks across dual-source test pairs spanning 220 sound categories.</figcaption>
+      </figure>
+
+      <details class="fold">
+        <summary>Evaluation protocol: source-wise vs. frame-wise</summary>
+        <div class="fold-body">
+          <figure class="fig">
+            <img src="static/images/eval_protocol.png" alt="Source-wise vs frame-wise evaluation protocol.">
+            <figcaption>Source-wise evaluation restricts each heatmap to its half-frame, never penalising cross-source activations and inflating IoU metrics. Frame-wise evaluation assesses each heatmap over the full frame, penalising any failure to suppress the non-target side.</figcaption>
+          </figure>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= BIBTEX ================= -->
+  <section class="sec alt" id="bibtex">
+    <div class="container is-max-desktop">
+      <h2 class="t">BibTeX</h2>
+      <div class="bib-box">
+        <button class="copy-btn" id="copyBib"><i class="fas fa-copy"></i> Copy</button>
+<pre><code id="bibText">@inproceedings{hu2026scav,
+  title     = {Whence the Voice? Self-supervised Dual-source Audio-Visual
+               Localisation via Selective Convergence},
+  author    = {Han Hu and Dongheng Lin and Yuqi Hou and Haotian Li and
+               Hyung Jin Chang and Jianbo Jiao},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2026}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <footer class="scav-foot">
+    <p>The MIx Group, University of Birmingham · ECCV 2026</p>
+    <p style="margin-top:.4rem;">Page template adapted from the <a href="https://github.com/nerfies/nerfies.github.io" target="_blank" rel="noopener">Nerfies</a> project page.</p>
+  </footer>
+
+  <script>
+  /* ---------------- SVG grouped bar chart ---------------- */
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, text){
+    const e = document.createElementNS(SVGNS, tag);
+    for(const k in attrs) e.setAttribute(k, attrs[k]);
+    if(text!=null) e.textContent = text;
+    return e;
+  }
+  // config: {metrics:[...], methods:[{name,vals:[...],hi:bool}], ymax, W,H}
+  function drawGroupedBars(svgId, legendId, cfg){
+    const svg = document.getElementById(svgId);
+    const W = 820, H = 420, padL=46, padR=16, padT=20, padB=64;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const ymax = cfg.ymax;
+    const ng = cfg.metrics.length, nm = cfg.methods.length;
+    const groupW = plotW / ng;
+    const barGap = 4, groupPad = 0.18*groupW;
+    const barW = (groupW - 2*groupPad - (nm-1)*barGap) / nm;
+    const palette = ["#aeb6c2","#9aa3b2","#868fa1","#727c90"]; // greys for baselines
+    const y = v => padT + plotH - (v/ymax)*plotH;
+
+    // y grid + axis
+    const ticks = 4;
+    for(let i=0;i<=ticks;i++){
+      const val = ymax*i/ticks;
+      const yy = y(val);
+      svg.appendChild(el("line",{x1:padL,y1:yy,x2:W-padR,y2:yy,class:"axis-line",opacity:i?0.5:1}));
+      svg.appendChild(el("text",{x:padL-8,y:yy+4,"text-anchor":"end","font-size":11,fill:"#888"}, val.toFixed(0)));
+    }
+
+    cfg.metrics.forEach((metric, gi)=>{
+      const gx = padL + gi*groupW + groupPad;
+      cfg.methods.forEach((m, mi)=>{
+        const v = m.vals[gi];
+        if(v==null) return;
+        const x = gx + mi*(barW+barGap);
+        const yy = y(v), h = padT+plotH-yy;
+        const fill = m.hi ? "var(--accent)" : palette[mi % palette.length];
+        const rect = el("rect",{x:x.toFixed(1),y:yy.toFixed(1),width:barW.toFixed(1),height:h.toFixed(1),rx:3,fill:fill});
+        rect.appendChild(el("title",{}, `${m.name} — ${metric}: ${v}`));
+        svg.appendChild(rect);
+        svg.appendChild(el("text",{x:(x+barW/2).toFixed(1),y:(yy-4).toFixed(1),"text-anchor":"middle",class:"bar-val",
+          "font-weight": m.hi?"800":"600", fill: m.hi?"#c2410c":"#444"}, v.toFixed(1)));
+      });
+      // group label
+      svg.appendChild(el("text",{x:(padL+gi*groupW+groupW/2).toFixed(1),y:H-padB+24,"text-anchor":"middle",class:"bar-grp-label"}, metric));
+    });
+
+    // legend
+    const lg = document.getElementById(legendId);
+    lg.innerHTML = "";
+    cfg.methods.forEach((m, mi)=>{
+      const color = m.hi ? "var(--accent)" : ["#aeb6c2","#9aa3b2","#868fa1","#727c90"][mi%4];
+      const s = document.createElement("span");
+      s.innerHTML = `<i style="background:${color}"></i>${m.name}`;
+      if(m.hi) s.style.fontWeight = "800";
+      lg.appendChild(s);
+    });
+  }
+
+  // VGGSound-Duet^Mask (self-sup only): [CIoU@0.3, CAP, AUC]
+  drawGroupedBars("chartMask","legendMask",{
+    metrics:["CIoU@0.3","CAP","AUC"],
+    ymax:45,
+    methods:[
+      {name:"LVS",      vals:[9.53,18.00,10.28]},
+      {name:"EZ-VSL",   vals:[9.58,16.82,11.35]},
+      {name:"NoPrior",  vals:[5.77,20.26,10.25]},
+      {name:"Slot-Attn",vals:[3.63,15.21,8.92]},
+      {name:"SCAV (Ours)",vals:[33.59,39.30,23.52],hi:true},
+    ]
+  });
+
+  // Bounding-box CIoU@0.3 (self-sup only): [MUSIC-Duet, VGGSound-Duet]
+  drawGroupedBars("chartBbox","legendBbox",{
+    metrics:["MUSIC-Duet","VGGSound-Duet"],
+    ymax:60,
+    methods:[
+      {name:"DSOL",     vals:[30.1,22.3]},
+      {name:"LVS",      vals:[22.5,17.3]},
+      {name:"EZ-VSL",   vals:[24.3,20.5]},
+      {name:"Mix-and-Loc.",vals:[26.5,21.1]},
+      {name:"SCAV (Ours)",vals:[47.1,53.3],hi:true},
+    ]
+  });
+
+  /* ---------------- carousel ---------------- */
+  if(window.bulmaCarousel){
+    bulmaCarousel.attach('#qual-carousel', {slidesToShow:1, loop:true, navigation:true, pagination:true});
+  }
+
+  /* ---------------- bibtex copy ---------------- */
+  document.getElementById("copyBib").addEventListener("click", function(){
+    const txt = document.getElementById("bibText").innerText;
+    navigator.clipboard.writeText(txt).then(()=>{
+      const b=this; const old=b.innerHTML; b.innerHTML='<i class="fas fa-check"></i> Copied';
+      setTimeout(()=>b.innerHTML=old,1600);
+    });
+  });
+  </script>
+</body>
+</html>
