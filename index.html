@@ -33,6 +33,9 @@
       --org-str:    #d79b00;   /* draw.io orange stroke / OURS accent */
       --org-dark:   #7a4b00;   /* text on orange fill */
       --yel-fill:   #fff2cc;   /* draw.io yellow fill */
+      --grn-fill:   #d5e8d4;   /* draw.io green fill */
+      --grn-str:    #82b366;   /* draw.io green stroke */
+      --grn-dark:   #3a6b35;   /* text on green fill */
       --line:       #e2e8f0;
     }
 
@@ -97,6 +100,18 @@
     .sec.alt { background: #f7f8fa; }
     .sec h2.t { font-size: 1.9rem; font-weight: 800; text-align: center; margin-bottom: .4rem; }
     .sec .lead { text-align: center; color: var(--muted); max-width: 760px; margin: 0 auto 2rem; font-size: 1.05rem; }
+    /* ── eyebrow + claim headline ──────────────────────────────── */
+    .sec-eyebrow {
+      display: block; text-align: center; font-size: .7rem; font-weight: 800;
+      letter-spacing: .16em; text-transform: uppercase; margin-bottom: .35rem;
+    }
+    .sec-claim {
+      font-size: 1.85rem; font-weight: 800; text-align: center;
+      color: var(--ink); margin-bottom: .5rem; line-height: 1.25;
+    }
+    .eyebrow-blue { color: var(--blue-str); }
+    .eyebrow-org  { color: var(--org-str);  }
+    .eyebrow-grn  { color: var(--grn-str);  }
     figure.fig { margin: 0 auto; max-width: 1000px; }
     figure.fig img { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #fff; }
     figure.fig figcaption { color: var(--muted); font-size: .92rem; margin-top: .7rem; text-align: center; }
@@ -228,16 +243,16 @@
 
     .bm-table-wrap { max-width: 860px; margin: 2rem auto 2.4rem; overflow-x: auto; }
     .bm-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-    .bm-table th { background: var(--blue-str); color: #fff; padding: .55rem .9rem; text-align: left; font-weight: 700; white-space: nowrap; }
+    .bm-table th { background: var(--grn-str); color: #fff; padding: .55rem .9rem; text-align: left; font-weight: 700; white-space: nowrap; }
     .bm-table td { padding: .5rem .9rem; border-bottom: 1px solid var(--line); color: var(--ink); vertical-align: middle; }
     .bm-table tbody tr:hover td { background: #f0f6ff; }
     .bm-table .bm-ours td { background: var(--yel-fill); border-top: 2px solid var(--org-str); }
     .bm-note { font-size: .8rem; color: var(--muted); margin-top: .6rem; line-height: 1.5; }
 
     .bbox-card {
-      background: var(--blue-fill);
+      background: var(--grn-fill);
       border-radius: 14px; padding: 1.2rem;
-      border: 1px solid #bdd7ee;
+      border: 1px solid var(--grn-str);
       max-width: 1000px; margin: 0 auto;
     }
     .bbox-card img { width: 100%; border-radius: 8px; display: block; }
@@ -325,7 +340,8 @@
   <!-- INSIGHT -->
   <section class="sec alt" id="insight">
     <div class="container is-max-desktop">
-      <h2 class="t">The Key Insight: Selective Convergence</h2>
+      <span class="sec-eyebrow eyebrow-blue">Insight</span>
+      <h2 class="sec-claim">Contrastive models naturally gravitate toward one source</h2>
       <p class="lead">When a contrastive audio-visual model is trained on mixed audio with two sounding objects, it does not split its attention evenly. It spontaneously commits to <b>one</b> source — the one it becomes biased toward.</p>
 
       <figure class="fig">
@@ -342,7 +358,8 @@
   <!-- METHOD -->
   <section class="sec" id="method">
     <div class="container is-max-desktop">
-      <h2 class="t">Method: A Two-Stage Progressive Framework</h2>
+      <span class="sec-eyebrow eyebrow-org">Method</span>
+      <h2 class="sec-claim">A spatial prior breaks the circular dependency</h2>
       <p class="lead">SCAV turns the one-source bias into a feature, not a bug: it uses the dominant source as a spatial prior to progressively uncover the subdominant one.</p>
 
       <figure class="fig">
@@ -386,7 +403,8 @@
   <!-- RESULTS -->
   <section class="sec alt" id="results">
     <div class="container is-max-desktop">
-      <h2 class="t">Results</h2>
+      <span class="sec-eyebrow eyebrow-org">Results</span>
+      <h2 class="sec-claim">Best self-supervised on every benchmark we tested</h2>
       <p class="lead">SCAV achieves the best performance among self-supervised methods across all benchmarks. All charts compare <b>self-supervised methods only</b>.</p>
 
       <!-- Chart slider -->
@@ -470,7 +488,8 @@
   <!-- DATASET -->
   <section class="sec" id="dataset">
     <div class="container is-max-desktop">
-      <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
+      <span class="sec-eyebrow eyebrow-grn">Dataset</span>
+      <h2 class="sec-claim">Bounding boxes lie — so we built a better benchmark</h2>
       <p class="lead">Existing benchmarks evaluate localisation against bounding-box annotations, which include substantial background and systematically inflate IoU. We introduce pixel-level segmentation masks for spatially-aligned evaluation.</p>
 
       <!-- Benchmark comparison table -->
@@ -520,14 +539,14 @@
             <img src="static/images/eval_protocol.png" alt="Source-wise vs frame-wise evaluation protocol.">
             <figcaption><em>Left:</em> a synthetic dual-source test sample is formed by horizontally concatenating two single-source frames. <em>Middle:</em> source-wise evaluation crops each predicted heatmap to its designated half-frame — cross-source activations are never penalised, inflating all IoU-based metrics. <em>Right:</em> frame-wise evaluation (used in our paper) assesses each heatmap over the full $H\!\times\!2W$ frame against a zero-padded ground-truth mask, penalising any failure to suppress the non-target side.</figcaption>
           </figure>
-          <div style="background:var(--blue-fill);border:1px solid #bdd7ee;border-radius:10px;padding:1rem 1.4rem;margin-top:1rem;">
+          <div style="background:var(--grn-fill);border:1px solid var(--grn-str);border-radius:10px;padding:1rem 1.4rem;margin-top:1rem;">
             <p style="margin:0 0 .6rem;font-size:.95rem;color:var(--ink);">
               The two protocols share the same numerator. Their denominators differ by $f_{\bar k}$, the number of activations on the <em>opposite</em> half-frame:
             </p>
             <p style="text-align:center;margin:.5rem 0;">
               $$\underbrace{|\,\mathcal{B}_k \cup \mathcal{M}_k^{+}|}_{\text{frame-wise}} = \underbrace{|\,\hat{\mathcal{B}}_k \cup \mathcal{M}_k^{\mathrm{half}}|}_{\text{source-wise}} + f_{\bar{k}}$$
             </p>
-            <p style="text-align:center;margin:.4rem 0 .5rem;font-size:1.05rem;font-weight:700;color:var(--blue-dark);">
+            <p style="text-align:center;margin:.4rem 0 .5rem;font-size:1.05rem;font-weight:700;color:var(--grn-dark);">
               $$\mathrm{IoU}^{\,\text{src}}_{k} \;\ge\; \mathrm{IoU}^{\,\text{frame}}_{k}$$
             </p>
             <p style="margin:.5rem 0 0;font-size:.9rem;color:var(--muted);">
