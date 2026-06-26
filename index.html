@@ -190,11 +190,18 @@
       100% { box-shadow: 0 0 0 0 rgba(108,142,191,0); transform: scale(1); }
     }
     .qual-btn.pulse { animation: qual-pulse .7s ease-out 2; }
-    .qual-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
-    .qual-col { display: flex; flex-direction: column; gap: .4rem; }
-    .qual-col-header { text-align: center; font-size: .78rem; font-weight: 800;
-      letter-spacing: .08em; text-transform: uppercase; padding: .35rem .5rem;
-      border-radius: 8px; }
+    .qual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: .4rem .6rem;
+    }
+    .qual-col-header {
+      text-align: center; font-size: .78rem; font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .35rem .5rem; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
     .gt-header { background: #e8e8e8; color: #444; }
     .obj-header { background: var(--org-fill); color: var(--org-dark); border: 1px solid #f0c070; }
     .qual-strip { width: 100%; border-radius: 6px; display: block;
@@ -412,24 +419,20 @@
           </div>
         </div>
         <div class="qual-grid">
-          <div class="qual-col">
-            <div class="qual-col-header gt-header">Ground Truth</div>
-            <img src="static/images/qual_gt.png" alt="Ground truth segmentation masks." class="qual-strip">
-          </div>
-          <div class="qual-col">
-            <div class="qual-col-header obj-header">Object 1</div>
-            <img src="static/images/qual_ours_obj1.png"
-                 data-ours="static/images/qual_ours_obj1.png"
-                 data-mix="static/images/qual_mix_obj1.png"
-                 alt="Object 1 localisation heatmap." class="qual-strip qual-swap">
-          </div>
-          <div class="qual-col">
-            <div class="qual-col-header obj-header">Object 2</div>
-            <img src="static/images/qual_ours_obj2.png"
-                 data-ours="static/images/qual_ours_obj2.png"
-                 data-mix="static/images/qual_mix_obj2.png"
-                 alt="Object 2 localisation heatmap." class="qual-strip qual-swap">
-          </div>
+          <!-- Row 1: all three headers (same grid row → same height) -->
+          <div class="qual-col-header gt-header">Ground Truth</div>
+          <div class="qual-col-header obj-header">Object 1</div>
+          <div class="qual-col-header obj-header">Object 2</div>
+          <!-- Row 2: all three images (tops auto-aligned) -->
+          <img src="static/images/qual_gt.png" alt="Ground truth segmentation masks." class="qual-strip">
+          <img src="static/images/qual_ours_obj1.png"
+               data-ours="static/images/qual_ours_obj1.png"
+               data-mix="static/images/qual_mix_obj1.png"
+               alt="Object 1 localisation heatmap." class="qual-strip qual-swap">
+          <img src="static/images/qual_ours_obj2.png"
+               data-ours="static/images/qual_ours_obj2.png"
+               data-mix="static/images/qual_mix_obj2.png"
+               alt="Object 2 localisation heatmap." class="qual-strip qual-swap">
         </div>
         <p class="qual-caption">Warmer colours = higher activation. <strong>SCAV produces focused, source-specific heatmaps</strong>; Mix-and-Localize collapses both sources into a single diffuse response.</p>
       </div>
