@@ -169,6 +169,23 @@
     }
     .copy-btn:hover { background: var(--blue-dark); }
 
+    /* ── bbox comparison layout ───────────────────────────────── */
+    .bbox-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; align-items: center;
+      max-width: 1000px; margin: 0 auto;
+    }
+    @media(max-width:768px) { .bbox-layout { grid-template-columns: 1fr; } }
+    .bbox-card {
+      background: var(--blue-fill);
+      border-radius: 14px; padding: 1.2rem;
+      border: 1px solid #bdd7ee;
+    }
+    .bbox-card img { width: 100%; border-radius: 8px; display: block; }
+    .bbox-text h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: .8rem; color: var(--ink); }
+    .bbox-text p { color: #444; font-size: .97rem; margin-bottom: .7rem; line-height: 1.65; }
+    .bbox-text p:last-child { margin-bottom: 0; }
+
     footer.scav-foot {
       padding: 2rem 1rem; text-align: center;
       color: var(--muted); font-size: .85rem;
@@ -359,7 +376,20 @@
       <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
       <p class="lead">Existing benchmarks evaluate localisation against bounding-box annotations, which include substantial background and systematically inflate IoU. We introduce pixel-level segmentation masks for spatially-aligned evaluation.</p>
 
-      <figure class="fig" style="max-width:720px;">
+      <!-- bbox issue: two-column layout to fill horizontal space -->
+      <div class="bbox-layout">
+        <div class="bbox-card">
+          <img src="static/images/bbox_issue.png" alt="Bounding boxes vs heatmaps comparison.">
+        </div>
+        <div class="bbox-text">
+          <h3>Why bounding boxes mislead</h3>
+          <p>Ground-truth bounding boxes encompass substantial background beyond the actual sounding region — a guitar neck, the space around a violin, empty corners of a frame.</p>
+          <p>Metrics computed against such boxes reward models that indiscriminately activate background pixels, paradoxically <em>penalising</em> precise localisation.</p>
+          <p>Our pixel-level masks eliminate this misalignment: every annotated pixel is a genuine sound-producing surface.</p>
+        </div>
+      </div>
+
+      <figure class="fig" style="max-width:720px;margin-top:2rem;">
         <img src="static/images/vggsound_duet_mask_hist.png" alt="Category distribution of VGGSound-Duet Mask.">
         <figcaption>VGGSound-Duet<sup>Mask</sup>: SAM-generated segmentation masks across dual-source test pairs spanning 220 sound categories.</figcaption>
       </figure>
