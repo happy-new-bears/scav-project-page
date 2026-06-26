@@ -170,21 +170,20 @@
     .copy-btn:hover { background: var(--blue-dark); }
 
     /* ── bbox comparison layout ───────────────────────────────── */
-    .bbox-layout {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 2rem; align-items: center;
-      max-width: 1000px; margin: 0 auto;
-    }
-    @media(max-width:768px) { .bbox-layout { grid-template-columns: 1fr; } }
     .bbox-card {
       background: var(--blue-fill);
       border-radius: 14px; padding: 1.2rem;
       border: 1px solid #bdd7ee;
+      max-width: 1000px; margin: 0 auto;
     }
     .bbox-card img { width: 100%; border-radius: 8px; display: block; }
-    .bbox-text h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: .8rem; color: var(--ink); }
-    .bbox-text p { color: #444; font-size: .97rem; margin-bottom: .7rem; line-height: 1.65; }
-    .bbox-text p:last-child { margin-bottom: 0; }
+    .bbox-points {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.2rem; max-width: 1000px; margin: 1.2rem auto 0;
+    }
+    @media(max-width:640px) { .bbox-points { grid-template-columns: 1fr; } }
+    .bbox-point { font-size: .93rem; color: #444; line-height: 1.65; }
+    .bbox-point strong { display: block; margin-bottom: .25rem; color: var(--ink); font-weight: 800; }
 
     footer.scav-foot {
       padding: 2rem 1rem; text-align: center;
@@ -378,17 +377,15 @@
       <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
       <p class="lead">Existing benchmarks evaluate localisation against bounding-box annotations, which include substantial background and systematically inflate IoU. We introduce pixel-level segmentation masks for spatially-aligned evaluation.</p>
 
-      <!-- bbox issue: two-column layout to fill horizontal space -->
-      <div class="bbox-layout">
-        <div class="bbox-card">
-          <img src="static/images/bbox_issue.png" alt="Bounding boxes vs heatmaps comparison.">
-        </div>
-        <div class="bbox-text">
-          <h3>Why bounding boxes mislead</h3>
-          <p>Ground-truth bounding boxes encompass substantial background beyond the actual sounding region — a guitar neck, the space around a violin, empty corners of a frame.</p>
-          <p>Metrics computed against such boxes reward models that indiscriminately activate background pixels, paradoxically <em>penalising</em> precise localisation.</p>
-          <p>Our pixel-level masks eliminate this misalignment: every annotated pixel is a genuine sound-producing surface.</p>
-        </div>
+      <!-- bbox issue: full-width image + three-column text below -->
+      <h3 style="font-size:1.1rem;font-weight:800;text-align:center;margin-bottom:1rem;color:var(--ink);">Why bounding boxes mislead</h3>
+      <div class="bbox-card">
+        <img src="static/images/bbox_issue.png" alt="Bounding boxes vs heatmaps comparison.">
+      </div>
+      <div class="bbox-points">
+        <div class="bbox-point"><strong>Boxes include background</strong>Ground-truth bounding boxes encompass substantial background beyond the actual sounding region — a guitar neck, the space around a violin, empty corners of a frame.</div>
+        <div class="bbox-point"><strong>Metrics reward imprecision</strong>Metrics against such boxes reward models that indiscriminately activate background pixels, paradoxically penalising precise localisation.</div>
+        <div class="bbox-point"><strong>Masks fix the misalignment</strong>Our pixel-level masks annotate only genuine sound-producing surfaces, enabling spatially-aligned evaluation.</div>
       </div>
 
       <figure class="fig" style="max-width:720px;margin-top:2rem;">
