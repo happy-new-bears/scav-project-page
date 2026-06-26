@@ -119,7 +119,6 @@
     .sc-head { padding: 1.5rem 1.4rem 1.2rem; }
     .sc-head.s1 { background: linear-gradient(135deg, #c5dbf5, var(--blue-fill)); }
     .sc-head.s2 { background: linear-gradient(135deg, #ffd4a8, var(--org-fill)); }
-    .sc-icon { font-size: 2rem; margin-bottom: .5rem; display: block; }
     .sc-label { font-size: .7rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; display: block; margin-bottom: .3rem; opacity: .75; }
     .sc-head.s1 .sc-label, .sc-head.s1 h3 { color: var(--blue-dark); }
     .sc-head.s2 .sc-label, .sc-head.s2 h3 { color: var(--org-dark); }
@@ -272,7 +271,6 @@
       <div class="stage-cards">
         <div class="stage-card">
           <div class="sc-head s1">
-            <span class="sc-icon">🎯</span>
             <span class="sc-label">Stage 1</span>
             <h3>Find the Dominant Source</h3>
           </div>
@@ -282,7 +280,6 @@
         </div>
         <div class="stage-card">
           <div class="sc-head s2">
-            <span class="sc-icon">🔬</span>
             <span class="sc-label">Stage 2</span>
             <h3>Reveal the Subdominant Source</h3>
           </div>
@@ -353,15 +350,6 @@
         </figure>
       </div>
 
-      <details class="fold">
-        <summary>Failure cases</summary>
-        <div class="fold-body">
-          <figure class="fig">
-            <img src="static/images/supp_f3.png" alt="Representative failure cases.">
-            <figcaption>Representative failures: boundary inaccuracy (top), separation failure (middle), and false activation on correlated but non-sounding regions (bottom).</figcaption>
-          </figure>
-        </div>
-      </details>
     </div>
   </section>
 
@@ -369,14 +357,9 @@
   <section class="sec" id="dataset">
     <div class="container is-max-desktop">
       <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
-      <p class="lead">Existing benchmarks compare continuous heatmaps against bounding boxes, which include large background regions and systematically bias the metrics. We add pixel-level segmentation masks for spatially-aligned evaluation.</p>
+      <p class="lead">Existing benchmarks evaluate localisation against bounding-box annotations, which include substantial background and systematically inflate IoU. We introduce pixel-level segmentation masks for spatially-aligned evaluation.</p>
 
-      <figure class="fig">
-        <img src="static/images/bbox_issue.png" alt="Bounding boxes include background; our heatmaps match sounding regions.">
-        <figcaption><b>Why bounding boxes mislead.</b> Top: ground-truth boxes encompass substantial background. Bottom: our heatmaps precisely match the sounding regions.</figcaption>
-      </figure>
-
-      <figure class="fig" style="margin-top:1.6rem;max-width:720px;">
+      <figure class="fig" style="max-width:720px;">
         <img src="static/images/vggsound_duet_mask_hist.png" alt="Category distribution of VGGSound-Duet Mask.">
         <figcaption>VGGSound-Duet<sup>Mask</sup>: SAM-generated segmentation masks across dual-source test pairs spanning 220 sound categories.</figcaption>
       </figure>
