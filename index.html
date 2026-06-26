@@ -172,8 +172,11 @@
     /* ── bbox comparison layout ───────────────────────────────── */
     /* ── qualitative comparison ───────────────────────────────── */
     .qual-wrap { max-width: 672px; margin: 2.6rem auto 0; }
-    .qual-toggle-row { display: flex; align-items: center; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
-    .qual-toggle-label { font-size: .85rem; color: var(--muted); font-weight: 600; }
+    .qual-toggle-area { text-align: center; margin-bottom: 1rem; }
+    .qual-hint { font-size: .78rem; color: var(--muted); margin-bottom: .5rem;
+      letter-spacing: .03em; }
+    .qual-hint::before { content: "↕ "; }
+    .qual-toggle-row { display: flex; align-items: center; gap: .6rem; justify-content: center; }
     .qual-btn {
       padding: .38rem 1rem; border-radius: 999px; border: 2px solid var(--blue-str);
       background: #fff; color: var(--blue-str); font-size: .85rem; font-weight: 700;
@@ -181,6 +184,12 @@
     }
     .qual-btn.active { background: var(--blue-str); color: #fff; }
     .qual-btn:not(.active):hover { background: var(--blue-fill); }
+    @keyframes qual-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(108,142,191,.7); transform: scale(1); }
+      50%  { box-shadow: 0 0 0 7px rgba(108,142,191,0); transform: scale(1.06); }
+      100% { box-shadow: 0 0 0 0 rgba(108,142,191,0); transform: scale(1); }
+    }
+    .qual-btn.pulse { animation: qual-pulse .7s ease-out 2; }
     .qual-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
     .qual-col { display: flex; flex-direction: column; gap: .4rem; }
     .qual-col-header { text-align: center; font-size: .78rem; font-weight: 800;
@@ -395,10 +404,12 @@
       <!-- Qualitative interactive comparison -->
       <div class="qual-wrap">
         <h3 class="title is-4 has-text-centered" style="margin-bottom:1.2rem;">Qualitative Comparisons</h3>
-        <div class="qual-toggle-row">
-          <span class="qual-toggle-label">Showing:</span>
-          <button class="qual-btn active" data-method="ours">SCAV (Ours)</button>
-          <button class="qual-btn" data-method="mix">Mix-and-Localize</button>
+        <div class="qual-toggle-area">
+          <p class="qual-hint">Click to compare methods</p>
+          <div class="qual-toggle-row">
+            <button class="qual-btn active" data-method="ours">SCAV (Ours)</button>
+            <button class="qual-btn" id="qualBtnMix" data-method="mix">Mix-and-Localize</button>
+          </div>
         </div>
         <div class="qual-grid">
           <div class="qual-col">
@@ -634,6 +645,15 @@
       });
   });
   // ── qualitative comparison toggle ──────────────────────────
+  // Pulse the inactive button once on load to signal interactivity
+  const qualBtnMix = document.getElementById('qualBtnMix');
+  if (qualBtnMix) {
+    setTimeout(() => {
+      qualBtnMix.classList.add('pulse');
+      qualBtnMix.addEventListener('animationend', () => qualBtnMix.classList.remove('pulse'), { once: true });
+    }, 1200);
+  }
+
   document.querySelectorAll('.qual-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const method = btn.dataset.method;
