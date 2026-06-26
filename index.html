@@ -170,6 +170,14 @@
     .copy-btn:hover { background: var(--blue-dark); }
 
     /* ── bbox comparison layout ───────────────────────────────── */
+    .bm-table-wrap { max-width: 860px; margin: 2rem auto 2.4rem; overflow-x: auto; }
+    .bm-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .bm-table th { background: var(--blue-str); color: #fff; padding: .55rem .9rem; text-align: left; font-weight: 700; white-space: nowrap; }
+    .bm-table td { padding: .5rem .9rem; border-bottom: 1px solid var(--line); color: var(--ink); vertical-align: middle; }
+    .bm-table tbody tr:hover td { background: #f0f6ff; }
+    .bm-table .bm-ours td { background: var(--yel-fill); border-top: 2px solid var(--org-str); }
+    .bm-note { font-size: .8rem; color: var(--muted); margin-top: .6rem; line-height: 1.5; }
+
     .bbox-card {
       background: var(--blue-fill);
       border-radius: 14px; padding: 1.2rem;
@@ -376,6 +384,35 @@
     <div class="container is-max-desktop">
       <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
       <p class="lead">Existing benchmarks evaluate localisation against bounding-box annotations, which include substantial background and systematically inflate IoU. We introduce pixel-level segmentation masks for spatially-aligned evaluation.</p>
+
+      <!-- Benchmark comparison table -->
+      <div class="bm-table-wrap">
+        <table class="bm-table">
+          <thead>
+            <tr>
+              <th>Dataset</th><th>Year</th><th>Test Samples</th><th>Annotation</th><th>#Classes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MUSIC-Duet</td><td>2018</td><td>17 <sup>†</sup></td><td>Bounding Box</td><td>11</td>
+            </tr>
+            <tr>
+              <td>MUSIC-Synthetic</td><td>2020</td><td>455</td><td>Bounding Box</td><td>15</td>
+            </tr>
+            <tr>
+              <td>VGGSound-Instruments</td><td>2022</td><td>446</td><td>Segmentation Mask</td><td>37</td>
+            </tr>
+            <tr>
+              <td>VGGSound-Duet</td><td>2023</td><td><s>5,158</s> 3,951 <sup>‡</sup></td><td>Bounding Box</td><td>220</td>
+            </tr>
+            <tr class="bm-ours">
+              <td><strong>VGGSound-Duet<sup>Mask</sup></strong> (Ours)</td><td><strong>2025</strong></td><td><strong>3,951</strong></td><td><strong>Segmentation Mask</strong></td><td><strong>220</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="bm-note"><sup>†</sup> MUSIC-Duet counts are video-level; each video contains multiple annotated frames. &nbsp; <sup>‡</sup> 3,951 samples currently accessible; remaining videos are unavailable on YouTube.</p>
+      </div>
 
       <!-- bbox issue: full-width image + three-column text below -->
       <h3 style="font-size:1.1rem;font-weight:800;text-align:center;margin-bottom:1rem;color:var(--ink);">Why bounding boxes mislead</h3>
