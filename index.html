@@ -170,6 +170,31 @@
     .copy-btn:hover { background: var(--blue-dark); }
 
     /* ── bbox comparison layout ───────────────────────────────── */
+    /* ── qualitative comparison ───────────────────────────────── */
+    .qual-wrap { max-width: 960px; margin: 2.6rem auto 0; }
+    .qual-toggle-row { display: flex; align-items: center; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
+    .qual-toggle-label { font-size: .85rem; color: var(--muted); font-weight: 600; }
+    .qual-btn {
+      padding: .38rem 1rem; border-radius: 999px; border: 2px solid var(--blue-str);
+      background: #fff; color: var(--blue-str); font-size: .85rem; font-weight: 700;
+      cursor: pointer; transition: all .18s;
+    }
+    .qual-btn.active { background: var(--blue-str); color: #fff; }
+    .qual-btn:not(.active):hover { background: var(--blue-fill); }
+    .qual-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
+    .qual-col { display: flex; flex-direction: column; gap: .4rem; }
+    .qual-col-header { text-align: center; font-size: .78rem; font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase; padding: .35rem .5rem;
+      border-radius: 8px; }
+    .gt-header { background: #e8e8e8; color: #444; }
+    .obj-header { background: var(--org-fill); color: var(--org-dark); border: 1px solid #f0c070; }
+    .qual-strip { width: 100%; border-radius: 6px; display: block;
+      transition: opacity .25s; }
+    .qual-strip.fading { opacity: 0; }
+    .qual-caption { font-size: .84rem; color: var(--muted); text-align: center;
+      margin-top: .8rem; line-height: 1.55; }
+    @media(max-width:600px) { .qual-grid { grid-template-columns: 1fr 1fr 1fr; gap: .3rem; } }
+
     .bm-table-wrap { max-width: 860px; margin: 2rem auto 2.4rem; overflow-x: auto; }
     .bm-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
     .bm-table th { background: var(--blue-str); color: #fff; padding: .55rem .9rem; text-align: left; font-weight: 700; white-space: nowrap; }
@@ -367,13 +392,35 @@
         </div>
       </div>
 
-      <!-- Qualitative -->
-      <div style="max-width:1000px;margin:2.6rem auto 0;">
-        <h3 class="title is-4 has-text-centered" style="margin-bottom:1rem;">Qualitative Comparisons</h3>
-        <figure class="fig">
-          <img src="static/images/supp_f1-cropped.png" alt="Qualitative comparison with Mix-and-Localize.">
-          <figcaption>Comparison with Mix-and-Localize: ground-truth segmentation masks (col 1), then first- and second-source localisation from each method. SCAV localises both sources accurately while baselines collapse to a single region.</figcaption>
-        </figure>
+      <!-- Qualitative interactive comparison -->
+      <div class="qual-wrap">
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1.2rem;">Qualitative Comparisons</h3>
+        <div class="qual-toggle-row">
+          <span class="qual-toggle-label">Showing:</span>
+          <button class="qual-btn active" data-method="ours">SCAV (Ours)</button>
+          <button class="qual-btn" data-method="mix">Mix-and-Localize</button>
+        </div>
+        <div class="qual-grid">
+          <div class="qual-col">
+            <div class="qual-col-header gt-header">Ground Truth</div>
+            <img src="static/images/qual_gt.png" alt="Ground truth segmentation masks." class="qual-strip">
+          </div>
+          <div class="qual-col">
+            <div class="qual-col-header obj-header">Object 1</div>
+            <img src="static/images/qual_ours_obj1.png"
+                 data-ours="static/images/qual_ours_obj1.png"
+                 data-mix="static/images/qual_mix_obj1.png"
+                 alt="Object 1 localisation heatmap." class="qual-strip qual-swap">
+          </div>
+          <div class="qual-col">
+            <div class="qual-col-header obj-header">Object 2</div>
+            <img src="static/images/qual_ours_obj2.png"
+                 data-ours="static/images/qual_ours_obj2.png"
+                 data-mix="static/images/qual_mix_obj2.png"
+                 alt="Object 2 localisation heatmap." class="qual-strip qual-swap">
+          </div>
+        </div>
+        <p class="qual-caption">Warmer colours = higher activation. <strong>SCAV produces focused, source-specific heatmaps</strong>; Mix-and-Localize collapses both sources into a single diffuse response.</p>
       </div>
 
     </div>
@@ -585,6 +632,20 @@
         b.innerHTML = '<i class="fas fa-check"></i> Copied';
         setTimeout(() => b.innerHTML = old, 1600);
       });
+  });
+  // ── qualitative comparison toggle ──────────────────────────
+  document.querySelectorAll('.qual-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const method = btn.dataset.method;
+      document.querySelectorAll('.qual-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.qual-swap').forEach(img => {
+        img.classList.add('fading');
+        setTimeout(() => {
+          img.src = img.dataset[method];
+          img.classList.remove('fading');
+        }, 200);
+      });
+    });
   });
   </script>
 </body>
