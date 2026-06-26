@@ -172,24 +172,39 @@
     /* ── bbox comparison layout ───────────────────────────────── */
     /* ── qualitative comparison ───────────────────────────────── */
     .qual-wrap { max-width: 672px; margin: 2.6rem auto 0; }
-    .qual-toggle-area { text-align: center; margin-bottom: 1rem; }
-    .qual-hint { font-size: .78rem; color: var(--muted); margin-bottom: .5rem;
-      letter-spacing: .03em; }
-    .qual-hint::before { content: "↕ "; }
-    .qual-toggle-row { display: flex; align-items: center; gap: .6rem; justify-content: center; }
+    .qual-toggle-area { margin-bottom: 1rem; }
+    .qual-hint { font-size: .75rem; color: var(--muted); text-align: center;
+      margin-bottom: .6rem; letter-spacing: .03em; }
+    .qual-toggle-row { display: flex; gap: .7rem; }
     .qual-btn {
-      padding: .38rem 1rem; border-radius: 999px; border: 2px solid var(--blue-str);
-      background: #fff; color: var(--blue-str); font-size: .85rem; font-weight: 700;
-      cursor: pointer; transition: all .18s;
+      flex: 1; padding: .7rem .8rem; border-radius: 12px;
+      border: 2px solid var(--line); background: #fafafa;
+      cursor: pointer; transition: all .2s; text-align: left;
+      display: flex; align-items: center; gap: .55rem;
     }
-    .qual-btn.active { background: var(--blue-str); color: #fff; }
-    .qual-btn:not(.active):hover { background: var(--blue-fill); }
+    .qual-btn:hover:not(.active) { border-color: var(--blue-str); background: var(--blue-fill); }
+    .qual-btn.active {
+      border-color: var(--blue-str); background: var(--blue-fill);
+      box-shadow: 0 0 0 3px rgba(108,142,191,.25);
+    }
+    .qual-btn-check {
+      width: 1.2rem; height: 1.2rem; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid var(--line); background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s; font-size: .7rem;
+    }
+    .qual-btn.active .qual-btn-check {
+      background: var(--blue-str); border-color: var(--blue-str); color: #fff;
+    }
+    .qual-btn-text { display: flex; flex-direction: column; gap: .05rem; }
+    .qual-btn-name { font-size: .85rem; font-weight: 800; color: var(--ink); }
+    .qual-btn-sub { font-size: .72rem; color: var(--muted); font-weight: 400; }
     @keyframes qual-pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(108,142,191,.7); transform: scale(1); }
-      50%  { box-shadow: 0 0 0 7px rgba(108,142,191,0); transform: scale(1.06); }
-      100% { box-shadow: 0 0 0 0 rgba(108,142,191,0); transform: scale(1); }
+      0%   { box-shadow: 0 0 0 0 rgba(108,142,191,.6); }
+      70%  { box-shadow: 0 0 0 8px rgba(108,142,191,0); }
+      100% { box-shadow: 0 0 0 0 rgba(108,142,191,0); }
     }
-    .qual-btn.pulse { animation: qual-pulse .7s ease-out 2; }
+    .qual-btn.pulse { animation: qual-pulse .8s ease-out 2; }
     .qual-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -412,10 +427,22 @@
       <div class="qual-wrap">
         <h3 class="title is-4 has-text-centered" style="margin-bottom:1.2rem;">Qualitative Comparisons</h3>
         <div class="qual-toggle-area">
-          <p class="qual-hint">Click to compare methods</p>
+          <p class="qual-hint">Select a method to view its localisation results</p>
           <div class="qual-toggle-row">
-            <button class="qual-btn active" data-method="ours">SCAV (Ours)</button>
-            <button class="qual-btn" id="qualBtnMix" data-method="mix">Mix-and-Localize</button>
+            <button class="qual-btn active" data-method="ours">
+              <span class="qual-btn-check">✓</span>
+              <span class="qual-btn-text">
+                <span class="qual-btn-name">SCAV (Ours)</span>
+                <span class="qual-btn-sub">Focused, source-specific heatmaps</span>
+              </span>
+            </button>
+            <button class="qual-btn" id="qualBtnMix" data-method="mix">
+              <span class="qual-btn-check"></span>
+              <span class="qual-btn-text">
+                <span class="qual-btn-name">Mix-and-Localize</span>
+                <span class="qual-btn-sub">Baseline — diffuse activation</span>
+              </span>
+            </button>
           </div>
         </div>
         <div class="qual-grid">
@@ -660,7 +687,11 @@
   document.querySelectorAll('.qual-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const method = btn.dataset.method;
-      document.querySelectorAll('.qual-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.qual-btn').forEach(b => {
+        const isActive = b === btn;
+        b.classList.toggle('active', isActive);
+        b.querySelector('.qual-btn-check').textContent = isActive ? '✓' : '';
+      });
       document.querySelectorAll('.qual-swap').forEach(img => {
         img.classList.add('fading');
         setTimeout(() => {
