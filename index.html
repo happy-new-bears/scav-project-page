@@ -192,6 +192,8 @@
       background: #f7f8fa; border-top: 1px solid var(--line);
     }
   </style>
+  <script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
 <body>
 
@@ -362,8 +364,8 @@
       <div style="max-width:1000px;margin:2.6rem auto 0;">
         <h3 class="title is-4 has-text-centered" style="margin-bottom:1rem;">Qualitative Comparisons</h3>
         <figure class="fig">
-          <img src="static/images/img3.png" alt="Qualitative comparison with LVS and EZ-VSL.">
-          <figcaption>Input + masks, then LVS and EZ-VSL, then our two localised sources. Warmer = higher activation.</figcaption>
+          <img src="static/images/supp_f1-cropped.png" alt="Qualitative comparison with Mix-and-Localize.">
+          <figcaption>Comparison with Mix-and-Localize: ground-truth segmentation masks (col 1), then first- and second-source localisation from each method. SCAV localises both sources accurately while baselines collapse to a single region.</figcaption>
         </figure>
       </div>
 
@@ -399,8 +401,22 @@
         <div class="fold-body">
           <figure class="fig">
             <img src="static/images/eval_protocol.png" alt="Source-wise vs frame-wise evaluation protocol.">
-            <figcaption>Source-wise evaluation restricts each heatmap to its half-frame, inflating IoU. Frame-wise evaluation assesses each heatmap over the full frame, penalising any failure to suppress the non-target side.</figcaption>
+            <figcaption><em>Left:</em> a synthetic dual-source test sample is formed by horizontally concatenating two single-source frames. <em>Middle:</em> source-wise evaluation crops each predicted heatmap to its designated half-frame — cross-source activations are never penalised, inflating all IoU-based metrics. <em>Right:</em> frame-wise evaluation (used in our paper) assesses each heatmap over the full $H\!\times\!2W$ frame against a zero-padded ground-truth mask, penalising any failure to suppress the non-target side.</figcaption>
           </figure>
+          <div style="background:var(--blue-fill);border:1px solid #bdd7ee;border-radius:10px;padding:1rem 1.4rem;margin-top:1rem;">
+            <p style="margin:0 0 .6rem;font-size:.95rem;color:var(--ink);">
+              The two protocols share the same numerator. Their denominators differ by $f_{\bar k}$, the number of activations on the <em>opposite</em> half-frame:
+            </p>
+            <p style="text-align:center;margin:.5rem 0;">
+              $$\underbrace{|\,\mathcal{B}_k \cup \mathcal{M}_k^{+}|}_{\text{frame-wise}} = \underbrace{|\,\hat{\mathcal{B}}_k \cup \mathcal{M}_k^{\mathrm{half}}|}_{\text{source-wise}} + f_{\bar{k}}$$
+            </p>
+            <p style="text-align:center;margin:.4rem 0 .5rem;font-size:1.05rem;font-weight:700;color:var(--blue-dark);">
+              $$\mathrm{IoU}^{\,\text{src}}_{k} \;\ge\; \mathrm{IoU}^{\,\text{frame}}_{k}$$
+            </p>
+            <p style="margin:.5rem 0 0;font-size:.9rem;color:var(--muted);">
+              Equality holds iff $f_{\bar k}=0$, i.e. the model produces zero activation on the opposite half. Source-wise evaluation therefore systematically inflates metrics whenever a model leaks activations across sources.
+            </p>
+          </div>
         </div>
       </details>
     </div>
