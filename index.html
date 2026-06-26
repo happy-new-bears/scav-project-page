@@ -6,7 +6,6 @@
   <meta name="description" content="SCAV: Self-supervised Dual-source Audio-Visual Localisation via Selective Convergence. ECCV 2026.">
   <meta name="keywords" content="audio-visual localisation, sound source localisation, dual-source, self-supervised, selective convergence, ECCV 2026">
 
-  <!-- Open Graph (URL intentionally omitted until deployment) -->
   <meta property="og:title" content="Whence the Voice? Self-supervised Dual-source Audio-Visual Localisation via Selective Convergence"/>
   <meta property="og:description" content="Contrastive audio-visual models naturally converge to a single dominant source. SCAV exploits this to localise two sources without any annotation."/>
   <meta property="og:image" content="static/images/img1.png"/>
@@ -16,124 +15,171 @@
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script src="static/js/bulma-carousel.min.js"></script>
-  <script src="static/js/bulma-slider.min.js"></script>
 
   <style>
-    :root{
-      --ink:#1b2030;
-      --muted:#6b7280;
-      --accent:#e8590c;      /* Ours highlight (orange) */
-      --accent-soft:#fde3d2;
-      --bar-grey:#aeb6c2;     /* baseline bars */
-      --bar-grey-d:#8a93a3;
-      --line:#e6e8ee;
-      --hero-a:#101630;
-      --hero-b:#27315c;
+    /* ── draw.io-inspired palette ──────────────────────────────── */
+    :root {
+      --ink:        #0f172a;
+      --muted:      #475569;
+      --blue-fill:  #dae8fc;   /* draw.io blue fill */
+      --blue-str:   #6c8ebf;   /* draw.io blue stroke */
+      --blue-dark:  #23445d;   /* text on blue fill */
+      --org-fill:   #ffe6cc;   /* draw.io orange fill */
+      --org-str:    #d79b00;   /* draw.io orange stroke / OURS accent */
+      --org-dark:   #7a4b00;   /* text on orange fill */
+      --yel-fill:   #fff2cc;   /* draw.io yellow fill */
+      --line:       #e2e8f0;
     }
-    html{scroll-behavior:smooth;}
-    body{color:var(--ink);}
-    /* ---------- nav ---------- */
-    .scav-nav{
-      position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);
-      backdrop-filter:saturate(150%) blur(6px);border-bottom:1px solid var(--line);
+
+    html { scroll-behavior: smooth; }
+    body { color: var(--ink); }
+
+    /* ── nav ─────────────────────────────────────────────────── */
+    .scav-nav {
+      position: sticky; top: 0; z-index: 30;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: saturate(150%) blur(6px);
+      border-bottom: 1px solid var(--line);
     }
-    .scav-nav .container{display:flex;align-items:center;justify-content:center;gap:1.25rem;
-      height:52px;flex-wrap:wrap;}
-    .scav-nav a{color:var(--muted);font-weight:600;font-size:.92rem;text-decoration:none;}
-    .scav-nav a:hover{color:var(--accent);}
-    .scav-nav .brand{color:var(--ink);font-weight:800;margin-right:auto;}
-    @media(max-width:768px){.scav-nav .brand{display:none;} .scav-nav .container{gap:.8rem;}}
-    /* ---------- hero ---------- */
-    .scav-hero{
-      background:linear-gradient(135deg,var(--hero-a),var(--hero-b));
-      color:#fff;padding:3.2rem 1rem 2.6rem;
+    .scav-nav .container {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.25rem; height: 52px; flex-wrap: wrap;
     }
-    .scav-hero .publication-title{color:#fff;}
-    .scav-hero .venue-badge{
-      display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
-      color:#fff;border-radius:999px;padding:.25rem .9rem;font-weight:700;letter-spacing:.04em;
-      font-size:.85rem;margin-bottom:1rem;
+    .scav-nav a { color: var(--muted); font-weight: 600; font-size: .92rem; text-decoration: none; }
+    .scav-nav a:hover { color: var(--blue-str); }
+    .scav-nav .brand { color: var(--ink); font-weight: 800; margin-right: auto; }
+    @media(max-width:768px) { .scav-nav .brand { display: none; } .scav-nav .container { gap: .8rem; } }
+
+    /* ── hero (light) ─────────────────────────────────────────── */
+    .scav-hero {
+      background: linear-gradient(135deg, var(--blue-fill) 0%, var(--yel-fill) 100%);
+      padding: 3.4rem 1rem 3rem;
     }
-    .scav-hero .title-line{font-style:italic;opacity:.95;}
-    .scav-hero .authors{margin:.4rem 0;font-size:1.06rem;}
-    .scav-hero .authors a{color:#fff;text-decoration:underline;text-underline-offset:2px;}
-    .scav-hero .authors sup{color:#ffd9bf;}
-    .scav-hero .affil{opacity:.85;font-size:.98rem;margin-top:.3rem;}
-    .scav-hero .eq{opacity:.7;font-size:.85rem;}
-    .btns{margin-top:1.3rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;}
-    .btns a{
-      display:inline-flex;align-items:center;gap:.45rem;background:#0d1226;color:#fff;
-      border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:.5rem 1.1rem;
-      font-weight:600;text-decoration:none;transition:.15s;
+    .scav-hero .publication-title { color: var(--ink); }
+    .venue-badge {
+      display: inline-block;
+      background: #fff; border: 1.5px solid var(--blue-str);
+      color: var(--blue-dark); border-radius: 999px;
+      padding: .25rem .9rem; font-weight: 700; letter-spacing: .04em;
+      font-size: .85rem; margin-bottom: 1rem;
     }
-    .btns a:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px);}
-    .btns a.disabled{opacity:.5;cursor:not-allowed;}
-    .fps{
-      margin-top:1.3rem;display:inline-flex;align-items:center;gap:.6rem;
-      background:rgba(232,89,12,.16);border:1px solid rgba(255,180,140,.5);
-      border-radius:12px;padding:.55rem 1.1rem;font-size:.95rem;
+    .title-line { font-style: italic; }
+    .scav-hero .authors { margin: .4rem 0; font-size: 1.06rem; color: var(--ink); }
+    .scav-hero .authors a { color: var(--blue-dark); text-decoration: underline; text-underline-offset: 2px; }
+    .scav-hero .authors sup { color: var(--org-str); }
+    .scav-hero .affil { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
+    .scav-hero .eq { color: #64748b; font-size: .85rem; }
+
+    .btns { margin-top: 1.4rem; display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+    .btns a {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: var(--blue-dark); color: #fff;
+      border-radius: 999px; padding: .5rem 1.1rem;
+      font-weight: 600; text-decoration: none; transition: .15s;
+      border: none;
     }
-    .fps b{color:#ffd9bf;font-size:1.15rem;}
-    /* ---------- sections ---------- */
-    .sec{padding:3.2rem 1rem;}
-    .sec.alt{background:#f7f8fb;}
-    .sec h2.t{font-size:1.9rem;font-weight:800;text-align:center;margin-bottom:.4rem;}
-    .sec .lead{text-align:center;color:var(--muted);max-width:760px;margin:0 auto 2rem;font-size:1.05rem;}
-    figure.fig{margin:0 auto;max-width:1000px;}
-    figure.fig img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;}
-    figure.fig figcaption{color:var(--muted);font-size:.92rem;margin-top:.7rem;text-align:center;}
-    .takeaway{
-      max-width:820px;margin:1.6rem auto 0;background:var(--accent-soft);
-      border-left:4px solid var(--accent);border-radius:8px;padding:.9rem 1.1rem;color:#7a3408;
+    .btns a:hover { background: var(--blue-str); transform: translateY(-1px); }
+    .btns a.btn-sec { background: var(--org-str); }
+    .btns a.btn-sec:hover { background: var(--org-dark); }
+    .btns a.btn-ghost {
+      background: #fff; color: var(--blue-dark);
+      border: 1.5px solid var(--blue-str);
     }
-    /* ---------- two-stage cards ---------- */
-    .stage-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:920px;margin:1.6rem auto 0;}
-    @media(max-width:768px){.stage-cards{grid-template-columns:1fr;}}
-    .stage-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.2rem;}
-    .stage-card .tag{display:inline-block;font-weight:800;color:var(--accent);font-size:.8rem;letter-spacing:.06em;}
-    .stage-card h3{font-weight:700;margin:.2rem 0 .4rem;font-size:1.12rem;}
-    .stage-card p{color:#444;font-size:.96rem;}
-    /* ---------- charts ---------- */
-    .chart-wrap{max-width:860px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.2rem 1rem .6rem;}
-    .chart-wrap h3{text-align:center;font-weight:700;margin-bottom:.2rem;}
-    .chart-sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:.6rem;}
-    .legend{display:flex;gap:1.2rem;justify-content:center;margin:.4rem 0 0;font-size:.88rem;color:#444;}
-    .legend span{display:inline-flex;align-items:center;gap:.4rem;}
-    .legend i{width:13px;height:13px;border-radius:3px;display:inline-block;}
-    .bar-val{font-size:11px;fill:#333;font-weight:600;}
-    .bar-grp-label{font-size:13px;fill:#1b2030;font-weight:700;}
-    .axis-line{stroke:#cfd4de;stroke-width:1;}
-    /* ---------- collapsible ---------- */
-    details.fold{max-width:1000px;margin:1.4rem auto 0;border:1px solid var(--line);border-radius:12px;background:#fff;}
-    details.fold>summary{cursor:pointer;padding:.9rem 1.2rem;font-weight:700;color:var(--ink);list-style:none;}
-    details.fold>summary::-webkit-details-marker{display:none;}
-    details.fold>summary::before{content:"▸ ";color:var(--accent);}
-    details.fold[open]>summary::before{content:"▾ ";}
-    details.fold .fold-body{padding:0 1.2rem 1.2rem;}
-    /* ---------- bibtex ---------- */
-    .bib-box{position:relative;max-width:900px;margin:0 auto;}
-    .bib-box pre{background:#0d1226;color:#e7ebf5;border-radius:12px;padding:1.2rem 1.2rem;overflow:auto;font-size:.86rem;}
-    .copy-btn{position:absolute;top:.7rem;right:.7rem;background:#27315c;color:#fff;border:none;
-      border-radius:8px;padding:.4rem .8rem;cursor:pointer;font-weight:600;font-size:.82rem;}
-    .copy-btn:hover{background:var(--accent);}
-    footer.scav-foot{padding:2rem 1rem;text-align:center;color:var(--muted);font-size:.85rem;background:#f7f8fb;border-top:1px solid var(--line);}
-    /* carousel items */
-    .carousel .item{padding:0 .5rem;}
-    .carousel .item img{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff;}
-    .carousel .item .cap{color:var(--muted);font-size:.9rem;text-align:center;margin-top:.6rem;}
+    .btns a.btn-ghost:hover { background: var(--blue-fill); }
+
+    /* ── sections ─────────────────────────────────────────────── */
+    .sec { padding: 3.2rem 1rem; }
+    .sec.alt { background: #f7f8fa; }
+    .sec h2.t { font-size: 1.9rem; font-weight: 800; text-align: center; margin-bottom: .4rem; }
+    .sec .lead { text-align: center; color: var(--muted); max-width: 760px; margin: 0 auto 2rem; font-size: 1.05rem; }
+    figure.fig { margin: 0 auto; max-width: 1000px; }
+    figure.fig img { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #fff; }
+    figure.fig figcaption { color: var(--muted); font-size: .92rem; margin-top: .7rem; text-align: center; }
+
+    /* ── takeaway box (draw.io blue) ──────────────────────────── */
+    .takeaway {
+      max-width: 820px; margin: 1.6rem auto 0;
+      background: var(--blue-fill);
+      border-left: 4px solid var(--blue-str);
+      border-radius: 0 8px 8px 0;
+      padding: .9rem 1.2rem;
+      color: var(--blue-dark);
+      font-size: 1.05rem;
+    }
+
+    /* ── stage cards (draw.io fills) ──────────────────────────── */
+    .stage-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 920px; margin: 1.8rem auto 0; }
+    @media(max-width:768px) { .stage-cards { grid-template-columns: 1fr; } }
+    .stage-card { border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.07); border: 1px solid var(--line); }
+    .sc-head { padding: 1.5rem 1.4rem 1.2rem; }
+    .sc-head.s1 { background: linear-gradient(135deg, #c5dbf5, var(--blue-fill)); }
+    .sc-head.s2 { background: linear-gradient(135deg, #ffd4a8, var(--org-fill)); }
+    .sc-icon { font-size: 2rem; margin-bottom: .5rem; display: block; }
+    .sc-label { font-size: .7rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; display: block; margin-bottom: .3rem; opacity: .75; }
+    .sc-head.s1 .sc-label, .sc-head.s1 h3 { color: var(--blue-dark); }
+    .sc-head.s2 .sc-label, .sc-head.s2 h3 { color: var(--org-dark); }
+    .sc-head h3 { font-size: 1.12rem; font-weight: 800; margin: 0; }
+    .sc-body { padding: 1rem 1.4rem 1.4rem; background: #fff; border-top: 1px solid var(--line); }
+    .sc-body p { color: #444; font-size: .96rem; margin: 0; }
+
+    /* ── chart slider ─────────────────────────────────────────── */
+    .chart-slider { max-width: 860px; margin: 0 auto; }
+    .chart-track-outer { overflow: hidden; border-radius: 12px; }
+    .chart-track-inner { display: flex; transition: transform .4s cubic-bezier(.4,0,.2,1); }
+    .chart-slide { min-width: 100%; }
+    .chart-wrap { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.2rem 1rem .6rem; }
+    .chart-wrap h3 { text-align: center; font-weight: 700; margin-bottom: .2rem; }
+    .chart-sub { text-align: center; color: var(--muted); font-size: .88rem; margin-bottom: .6rem; }
+    .chart-dots-row { display: flex; flex-direction: column; align-items: center; gap: .4rem; margin-top: 1rem; }
+    .chart-dots { display: flex; gap: .7rem; }
+    .cdot { width: 10px; height: 10px; border-radius: 50%; background: #c8d8ea; border: none; cursor: pointer; padding: 0; transition: all .2s; }
+    .cdot.active { background: var(--blue-str); transform: scale(1.3); }
+    .cdot-labels { display: flex; gap: 2.2rem; font-size: .82rem; color: var(--muted); }
+    .cdot-label { cursor: pointer; transition: .15s; white-space: nowrap; }
+    .cdot-label.active { color: var(--blue-str); font-weight: 700; }
+
+    /* ── bar chart helpers ────────────────────────────────────── */
+    .legend { display: flex; gap: 1.2rem; justify-content: center; margin: .4rem 0 0; font-size: .88rem; color: #444; flex-wrap: wrap; }
+    .legend span { display: inline-flex; align-items: center; gap: .4rem; }
+    .legend i { width: 13px; height: 13px; border-radius: 3px; display: inline-block; }
+    .bar-val { font-size: 11px; fill: #333; font-weight: 600; }
+    .bar-grp-label { font-size: 13px; fill: var(--ink); font-weight: 700; }
+    .axis-line { stroke: #d8e4f0; stroke-width: 1; }
+
+    /* ── collapsible ──────────────────────────────────────────── */
+    details.fold { max-width: 1000px; margin: 1.4rem auto 0; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    details.fold > summary { cursor: pointer; padding: .9rem 1.2rem; font-weight: 700; color: var(--ink); list-style: none; }
+    details.fold > summary::-webkit-details-marker { display: none; }
+    details.fold > summary::before { content: "▸ "; color: var(--blue-str); }
+    details.fold[open] > summary::before { content: "▾ "; }
+    details.fold .fold-body { padding: 0 1.2rem 1.2rem; }
+
+    /* ── bibtex ───────────────────────────────────────────────── */
+    .bib-box { position: relative; max-width: 900px; margin: 0 auto; }
+    .bib-box pre { background: #1e2f45; color: #e7ebf5; border-radius: 12px; padding: 1.2rem; overflow: auto; font-size: .86rem; }
+    .copy-btn {
+      position: absolute; top: .7rem; right: .7rem;
+      background: var(--blue-str); color: #fff; border: none;
+      border-radius: 8px; padding: .4rem .8rem; cursor: pointer;
+      font-weight: 600; font-size: .82rem;
+    }
+    .copy-btn:hover { background: var(--blue-dark); }
+
+    footer.scav-foot {
+      padding: 2rem 1rem; text-align: center;
+      color: var(--muted); font-size: .85rem;
+      background: #f7f8fa; border-top: 1px solid var(--line);
+    }
   </style>
 </head>
 <body>
 
-  <!-- ================= NAV ================= -->
+  <!-- NAV -->
   <nav class="scav-nav">
     <div class="container">
       <span class="brand">SCAV</span>
@@ -145,7 +191,7 @@
     </div>
   </nav>
 
-  <!-- ================= HERO ================= -->
+  <!-- HERO -->
   <section class="scav-hero has-text-centered">
     <div class="container is-max-desktop">
       <span class="venue-badge">ECCV 2026</span>
@@ -166,19 +212,26 @@
       <div class="eq"><sup>*</sup>Equal contribution</div>
 
       <div class="btns">
-        <!-- TODO: Paper/arXiv link pending — replace href="#" when available -->
-        <a href="#" class="disabled" title="Coming soon"><i class="fas fa-file-pdf"></i> Paper</a>
-        <a href="https://github.com/happy-new-bears/SCAV" target="_blank" rel="noopener"><i class="fab fa-github"></i> Code</a>
-        <a href="https://drive.google.com/drive/folders/1AyAUnO5YeJMECnRutgXqr249KqzpZB4o?usp=sharing" target="_blank" rel="noopener"><i class="fas fa-cubes"></i> Checkpoints</a>
-        <a href="https://drive.google.com/file/d/1tYu-MAhG1El1kc8DE9UebSHeF8u9Ss-1/view?usp=sharing" target="_blank" rel="noopener"><i class="fas fa-database"></i> Dataset</a>
-        <a href="#bibtex"><i class="fas fa-quote-right"></i> BibTeX</a>
+        <a href="6849_Whence_the_Voice_Self_sup.pdf" target="_blank" rel="noopener">
+          <i class="fas fa-file-pdf"></i> Paper
+        </a>
+        <a href="https://github.com/happy-new-bears/SCAV" target="_blank" rel="noopener">
+          <i class="fab fa-github"></i> Code
+        </a>
+        <a href="https://drive.google.com/drive/folders/1AyAUnO5YeJMECnRutgXqr249KqzpZB4o?usp=sharing" target="_blank" rel="noopener" class="btn-sec">
+          <i class="fas fa-cubes"></i> Checkpoints
+        </a>
+        <a href="https://drive.google.com/file/d/1tYu-MAhG1El1kc8DE9UebSHeF8u9Ss-1/view?usp=sharing" target="_blank" rel="noopener" class="btn-ghost">
+          <i class="fas fa-database"></i> Dataset
+        </a>
+        <a href="#bibtex" class="btn-ghost">
+          <i class="fas fa-quote-right"></i> BibTeX
+        </a>
       </div>
-
-      <div><span class="fps"><i class="fas fa-bolt"></i> Both sources in a single forward pass — <b>43.2&nbsp;FPS</b> on one NVIDIA A100</span></div>
     </div>
   </section>
 
-  <!-- ================= TEASER / OVERVIEW ================= -->
+  <!-- TEASER -->
   <section class="sec">
     <div class="container is-max-desktop">
       <figure class="fig">
@@ -188,24 +241,24 @@
     </div>
   </section>
 
-  <!-- ================= INSIGHT ================= -->
+  <!-- INSIGHT -->
   <section class="sec alt" id="insight">
     <div class="container is-max-desktop">
       <h2 class="t">The Key Insight: Selective Convergence</h2>
       <p class="lead">When a contrastive audio-visual model is trained on mixed audio with two sounding objects, it does not split its attention evenly. It spontaneously commits to <b>one</b> source — the one it becomes biased toward.</p>
 
       <figure class="fig">
-        <img src="static/images/img5.png" alt="Examples of selective convergence: input frames and first-stage heatmaps concentrating on a single source.">
+        <img src="static/images/img5.png" alt="Examples of selective convergence: first-stage heatmaps concentrating on a single source.">
         <figcaption><b>Selective convergence in Stage&nbsp;1.</b> Given two ground-truth sources (green / red boxes), the first-stage heatmap concentrates on a single dominant source rather than both.</figcaption>
       </figure>
 
       <div class="takeaway">
-        <b>What we claim — and what we don't.</b> We define the <i>dominant source</i> as whichever source the model converges to. Our framework depends only on the fact that it commits to <i>one</i> source as a spatial prior — <b>not</b> on <i>which</i> one. The identity of the winner is left to the data.
+        The model's bias is not a bug — it is the algorithm.
       </div>
     </div>
   </section>
 
-  <!-- ================= METHOD ================= -->
+  <!-- METHOD -->
   <section class="sec" id="method">
     <div class="container is-max-desktop">
       <h2 class="t">Method: A Two-Stage Progressive Framework</h2>
@@ -218,14 +271,24 @@
 
       <div class="stage-cards">
         <div class="stage-card">
-          <span class="tag">STAGE 1</span>
-          <h3>Find the dominant source</h3>
-          <p>Contrastive learning on the mixed audio drives the model to converge on a single source, yielding a clean spatial prior <b>M<sub>dom</sub></b> — no annotations required.</p>
+          <div class="sc-head s1">
+            <span class="sc-icon">🎯</span>
+            <span class="sc-label">Stage 1</span>
+            <h3>Find the Dominant Source</h3>
+          </div>
+          <div class="sc-body">
+            <p>Contrastive learning on the mixed audio drives the model to converge on a single source, yielding a clean spatial prior <b>M<sub>dom</sub></b> — no annotations required.</p>
+          </div>
         </div>
         <div class="stage-card">
-          <span class="tag">STAGE 2</span>
-          <h3>Reveal the subdominant source</h3>
-          <p>Using <b>M<sub>dom</sub></b> as a prior, the model decouples the remaining audio-visual correspondence and localises the second source <b>M<sub>sub</sub></b> in the same forward pass.</p>
+          <div class="sc-head s2">
+            <span class="sc-icon">🔬</span>
+            <span class="sc-label">Stage 2</span>
+            <h3>Reveal the Subdominant Source</h3>
+          </div>
+          <div class="sc-body">
+            <p>Using <b>M<sub>dom</sub></b> as a prior, the model decouples the remaining audio-visual correspondence and localises the second source <b>M<sub>sub</sub></b> in the same forward pass.</p>
+          </div>
         </div>
       </div>
 
@@ -233,7 +296,7 @@
         <summary>Dominant-source extraction (post-processing)</summary>
         <div class="fold-body">
           <figure class="fig">
-            <img src="static/images/supp_fig3.png" alt="Illustration of the post-processing algorithm for dominant source extraction.">
+            <img src="static/images/supp_fig3.png" alt="Post-processing algorithm for dominant source extraction.">
             <figcaption>Post-processing pipeline that extracts the dominant source region from the Stage&nbsp;1 heatmap.</figcaption>
           </figure>
         </div>
@@ -241,44 +304,55 @@
     </div>
   </section>
 
-  <!-- ================= RESULTS ================= -->
+  <!-- RESULTS -->
   <section class="sec alt" id="results">
     <div class="container is-max-desktop">
       <h2 class="t">Results</h2>
-      <p class="lead">SCAV achieves the best performance among self-supervised methods across benchmarks — and even surpasses some weakly-supervised methods on certain metrics. All charts below compare <b>self-supervised methods only</b>.</p>
+      <p class="lead">SCAV achieves the best performance among self-supervised methods across all benchmarks. All charts compare <b>self-supervised methods only</b>.</p>
 
-      <!-- Primary chart: VGGSound-Duet^Mask -->
-      <div class="chart-wrap">
-        <h3>VGGSound-Duet<sup>Mask</sup> — mask-based evaluation</h3>
-        <div class="chart-sub">Higher is better. Self-supervised methods only.</div>
-        <svg id="chartMask" viewBox="0 0 820 420" role="img" aria-label="Bar chart on VGGSound-Duet Mask"></svg>
-        <div class="legend" id="legendMask"></div>
-      </div>
-
-      <!-- Secondary chart: bbox CIoU@0.3 -->
-      <div class="chart-wrap" style="margin-top:1.6rem;">
-        <h3>Bounding-box evaluation — CIoU@0.3</h3>
-        <div class="chart-sub">Self-supervised methods on MUSIC-Duet and VGGSound-Duet.</div>
-        <svg id="chartBbox" viewBox="0 0 820 420" role="img" aria-label="Bar chart, bounding box CIoU"></svg>
-        <div class="legend" id="legendBbox"></div>
-      </div>
-
-      <!-- Qualitative carousel -->
-      <div style="max-width:1000px;margin:2.2rem auto 0;">
-        <h3 class="title is-4 has-text-centered">Qualitative Comparisons</h3>
-        <div class="carousel" id="qual-carousel">
-          <div class="item">
-            <img src="static/images/img3.png" alt="Qualitative comparison with LVS and EZ-VSL.">
-            <div class="cap">Input + masks, then LVS and EZ-VSL, then our two localised sources. Warmer = higher activation.</div>
+      <!-- Chart slider -->
+      <div class="chart-slider">
+        <div class="chart-track-outer">
+          <div class="chart-track-inner" id="chartTrack">
+            <div class="chart-slide">
+              <div class="chart-wrap">
+                <h3>VGGSound-Duet<sup>Mask</sup> — mask-based evaluation</h3>
+                <div class="chart-sub">Higher is better. Self-supervised methods only.</div>
+                <svg id="chartMask" viewBox="0 0 820 420" role="img" aria-label="Bar chart on VGGSound-Duet Mask"></svg>
+                <div class="legend" id="legendMask"></div>
+              </div>
+            </div>
+            <div class="chart-slide">
+              <div class="chart-wrap">
+                <h3>Bounding-box evaluation — CIoU@0.3</h3>
+                <div class="chart-sub">Self-supervised methods on MUSIC-Duet and VGGSound-Duet.</div>
+                <svg id="chartBbox" viewBox="0 0 820 420" role="img" aria-label="Bar chart, bounding box CIoU"></svg>
+                <div class="legend" id="legendBbox"></div>
+              </div>
+            </div>
           </div>
-          <div class="item">
-            <img src="static/images/supp_f1-cropped.png" alt="Comparison with Mix-and-Localize.">
-            <div class="cap">Comparison with Mix-and-Localize: ground-truth masks, then first- and second-source localisation from each method.</div>
+        </div>
+        <div class="chart-dots-row">
+          <div class="chart-dots" id="chartDots">
+            <button class="cdot active" data-i="0" title="VGGSound-Duet^Mask"></button>
+            <button class="cdot" data-i="1" title="Bounding-box Eval"></button>
+          </div>
+          <div class="cdot-labels">
+            <span class="cdot-label active" data-i="0">VGGSound-Duet<sup>Mask</sup></span>
+            <span class="cdot-label" data-i="1">Bounding-box</span>
           </div>
         </div>
       </div>
 
-      <!-- Failure cases -->
+      <!-- Qualitative -->
+      <div style="max-width:1000px;margin:2.6rem auto 0;">
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1rem;">Qualitative Comparisons</h3>
+        <figure class="fig">
+          <img src="static/images/img3.png" alt="Qualitative comparison with LVS and EZ-VSL.">
+          <figcaption>Input + masks, then LVS and EZ-VSL, then our two localised sources. Warmer = higher activation.</figcaption>
+        </figure>
+      </div>
+
       <details class="fold">
         <summary>Failure cases</summary>
         <div class="fold-body">
@@ -291,7 +365,7 @@
     </div>
   </section>
 
-  <!-- ================= DATASET ================= -->
+  <!-- DATASET -->
   <section class="sec" id="dataset">
     <div class="container is-max-desktop">
       <h2 class="t">VGGSound-Duet<sup>Mask</sup> Benchmark</h2>
@@ -312,14 +386,14 @@
         <div class="fold-body">
           <figure class="fig">
             <img src="static/images/eval_protocol.png" alt="Source-wise vs frame-wise evaluation protocol.">
-            <figcaption>Source-wise evaluation restricts each heatmap to its half-frame, never penalising cross-source activations and inflating IoU metrics. Frame-wise evaluation assesses each heatmap over the full frame, penalising any failure to suppress the non-target side.</figcaption>
+            <figcaption>Source-wise evaluation restricts each heatmap to its half-frame, inflating IoU. Frame-wise evaluation assesses each heatmap over the full frame, penalising any failure to suppress the non-target side.</figcaption>
           </figure>
         </div>
       </details>
     </div>
   </section>
 
-  <!-- ================= BIBTEX ================= -->
+  <!-- BIBTEX -->
   <section class="sec alt" id="bibtex">
     <div class="container is-max-desktop">
       <h2 class="t">BibTeX</h2>
@@ -343,104 +417,116 @@
   </footer>
 
   <script>
-  /* ---------------- SVG grouped bar chart ---------------- */
+  /* ── SVG bar chart ────────────────────────────────────────────── */
   const SVGNS = "http://www.w3.org/2000/svg";
-  function el(tag, attrs, text){
+  function el(tag, attrs, text) {
     const e = document.createElementNS(SVGNS, tag);
-    for(const k in attrs) e.setAttribute(k, attrs[k]);
-    if(text!=null) e.textContent = text;
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
     return e;
   }
-  // config: {metrics:[...], methods:[{name,vals:[...],hi:bool}], ymax, W,H}
-  function drawGroupedBars(svgId, legendId, cfg){
+
+  function drawGroupedBars(svgId, legendId, cfg) {
     const svg = document.getElementById(svgId);
-    const W = 820, H = 420, padL=46, padR=16, padT=20, padB=64;
-    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const W=820, H=420, padL=46, padR=16, padT=20, padB=64;
+    const plotW = W-padL-padR, plotH = H-padT-padB;
     const ymax = cfg.ymax;
     const ng = cfg.metrics.length, nm = cfg.methods.length;
     const groupW = plotW / ng;
-    const barGap = 4, groupPad = 0.18*groupW;
+    const barGap = 4, groupPad = 0.18 * groupW;
     const barW = (groupW - 2*groupPad - (nm-1)*barGap) / nm;
-    const palette = ["#aeb6c2","#9aa3b2","#868fa1","#727c90"]; // greys for baselines
-    const y = v => padT + plotH - (v/ymax)*plotH;
 
-    // y grid + axis
-    const ticks = 4;
-    for(let i=0;i<=ticks;i++){
-      const val = ymax*i/ticks;
-      const yy = y(val);
-      svg.appendChild(el("line",{x1:padL,y1:yy,x2:W-padR,y2:yy,class:"axis-line",opacity:i?0.5:1}));
-      svg.appendChild(el("text",{x:padL-8,y:yy+4,"text-anchor":"end","font-size":11,fill:"#888"}, val.toFixed(0)));
+    /* draw.io blue shades for baselines */
+    const palette = ["#bdd7ee", "#a4c9e8", "#8bbae0", "#72abd8"];
+    const y = v => padT + plotH - (v / ymax) * plotH;
+
+    for (let i = 0; i <= 4; i++) {
+      const val = ymax * i / 4, yy = y(val);
+      svg.appendChild(el("line", {x1:padL, y1:yy, x2:W-padR, y2:yy, class:"axis-line", opacity: i?0.6:1}));
+      svg.appendChild(el("text", {x:padL-8, y:yy+4, "text-anchor":"end", "font-size":11, fill:"#888"}, val.toFixed(0)));
     }
 
-    cfg.metrics.forEach((metric, gi)=>{
+    cfg.metrics.forEach((metric, gi) => {
       const gx = padL + gi*groupW + groupPad;
-      cfg.methods.forEach((m, mi)=>{
+      cfg.methods.forEach((m, mi) => {
         const v = m.vals[gi];
-        if(v==null) return;
+        if (v == null) return;
         const x = gx + mi*(barW+barGap);
         const yy = y(v), h = padT+plotH-yy;
-        const fill = m.hi ? "var(--accent)" : palette[mi % palette.length];
-        const rect = el("rect",{x:x.toFixed(1),y:yy.toFixed(1),width:barW.toFixed(1),height:h.toFixed(1),rx:3,fill:fill});
-        rect.appendChild(el("title",{}, `${m.name} — ${metric}: ${v}`));
+        const fill = m.hi ? "#d79b00" : palette[mi % palette.length];
+        const rect = el("rect", {x:x.toFixed(1), y:yy.toFixed(1), width:barW.toFixed(1), height:h.toFixed(1), rx:3, fill});
+        rect.appendChild(el("title", {}, `${m.name} — ${metric}: ${v}`));
         svg.appendChild(rect);
-        svg.appendChild(el("text",{x:(x+barW/2).toFixed(1),y:(yy-4).toFixed(1),"text-anchor":"middle",class:"bar-val",
-          "font-weight": m.hi?"800":"600", fill: m.hi?"#c2410c":"#444"}, v.toFixed(1)));
+        svg.appendChild(el("text", {
+          x:(x+barW/2).toFixed(1), y:(yy-4).toFixed(1),
+          "text-anchor":"middle", class:"bar-val",
+          "font-weight": m.hi ? "800" : "600",
+          fill: m.hi ? "#5a3d00" : "#4a6a8a"
+        }, v.toFixed(1)));
       });
-      // group label
-      svg.appendChild(el("text",{x:(padL+gi*groupW+groupW/2).toFixed(1),y:H-padB+24,"text-anchor":"middle",class:"bar-grp-label"}, metric));
+      svg.appendChild(el("text", {
+        x:(padL+gi*groupW+groupW/2).toFixed(1), y:H-padB+24,
+        "text-anchor":"middle", class:"bar-grp-label"
+      }, metric));
     });
 
-    // legend
     const lg = document.getElementById(legendId);
     lg.innerHTML = "";
-    cfg.methods.forEach((m, mi)=>{
-      const color = m.hi ? "var(--accent)" : ["#aeb6c2","#9aa3b2","#868fa1","#727c90"][mi%4];
+    cfg.methods.forEach((m, mi) => {
+      const color = m.hi ? "#d79b00" : palette[mi % palette.length];
       const s = document.createElement("span");
       s.innerHTML = `<i style="background:${color}"></i>${m.name}`;
-      if(m.hi) s.style.fontWeight = "800";
+      if (m.hi) s.style.fontWeight = "800";
       lg.appendChild(s);
     });
   }
 
-  // VGGSound-Duet^Mask (self-sup only): [CIoU@0.3, CAP, AUC]
-  drawGroupedBars("chartMask","legendMask",{
-    metrics:["CIoU@0.3","CAP","AUC"],
-    ymax:45,
-    methods:[
-      {name:"LVS",      vals:[9.53,18.00,10.28]},
-      {name:"EZ-VSL",   vals:[9.58,16.82,11.35]},
-      {name:"NoPrior",  vals:[5.77,20.26,10.25]},
-      {name:"Slot-Attn",vals:[3.63,15.21,8.92]},
-      {name:"SCAV (Ours)",vals:[33.59,39.30,23.52],hi:true},
+  drawGroupedBars("chartMask", "legendMask", {
+    metrics: ["CIoU@0.3", "CAP", "AUC"],
+    ymax: 45,
+    methods: [
+      {name:"LVS",          vals:[9.53, 18.00, 10.28]},
+      {name:"EZ-VSL",       vals:[9.58, 16.82, 11.35]},
+      {name:"NoPrior",      vals:[5.77, 20.26, 10.25]},
+      {name:"Slot-Attn",    vals:[3.63, 15.21,  8.92]},
+      {name:"SCAV (Ours)",  vals:[33.59,39.30, 23.52], hi:true},
     ]
   });
 
-  // Bounding-box CIoU@0.3 (self-sup only): [MUSIC-Duet, VGGSound-Duet]
-  drawGroupedBars("chartBbox","legendBbox",{
-    metrics:["MUSIC-Duet","VGGSound-Duet"],
-    ymax:60,
-    methods:[
-      {name:"DSOL",     vals:[30.1,22.3]},
-      {name:"LVS",      vals:[22.5,17.3]},
-      {name:"EZ-VSL",   vals:[24.3,20.5]},
-      {name:"Mix-and-Loc.",vals:[26.5,21.1]},
-      {name:"SCAV (Ours)",vals:[47.1,53.3],hi:true},
+  drawGroupedBars("chartBbox", "legendBbox", {
+    metrics: ["MUSIC-Duet", "VGGSound-Duet"],
+    ymax: 60,
+    methods: [
+      {name:"DSOL",          vals:[30.1, 22.3]},
+      {name:"LVS",           vals:[22.5, 17.3]},
+      {name:"EZ-VSL",        vals:[24.3, 20.5]},
+      {name:"Mix-and-Loc.",  vals:[26.5, 21.1]},
+      {name:"SCAV (Ours)",   vals:[47.1, 53.3], hi:true},
     ]
   });
 
-  /* ---------------- carousel ---------------- */
-  if(window.bulmaCarousel){
-    bulmaCarousel.attach('#qual-carousel', {slidesToShow:1, loop:true, navigation:true, pagination:true});
-  }
+  /* ── Chart dot-slider ─────────────────────────────────────────── */
+  (function () {
+    const track  = document.getElementById("chartTrack");
+    const dots   = document.querySelectorAll("#chartDots .cdot");
+    const labels = document.querySelectorAll(".cdot-label");
+    function goTo(i) {
+      track.style.transform = `translateX(-${i * 100}%)`;
+      dots.forEach((d, idx)  => d.classList.toggle("active", idx === i));
+      labels.forEach((l, idx) => l.classList.toggle("active", idx === i));
+    }
+    dots.forEach(d   => d.addEventListener("click", () => goTo(+d.dataset.i)));
+    labels.forEach(l => l.addEventListener("click", () => goTo(+l.dataset.i)));
+  })();
 
-  /* ---------------- bibtex copy ---------------- */
-  document.getElementById("copyBib").addEventListener("click", function(){
-    const txt = document.getElementById("bibText").innerText;
-    navigator.clipboard.writeText(txt).then(()=>{
-      const b=this; const old=b.innerHTML; b.innerHTML='<i class="fas fa-check"></i> Copied';
-      setTimeout(()=>b.innerHTML=old,1600);
-    });
+  /* ── BibTeX copy ──────────────────────────────────────────────── */
+  document.getElementById("copyBib").addEventListener("click", function () {
+    navigator.clipboard.writeText(document.getElementById("bibText").innerText)
+      .then(() => {
+        const b = this, old = b.innerHTML;
+        b.innerHTML = '<i class="fas fa-check"></i> Copied';
+        setTimeout(() => b.innerHTML = old, 1600);
+      });
   });
   </script>
 </body>
